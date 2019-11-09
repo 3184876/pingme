@@ -32,6 +32,11 @@ func main() {
 	if l == 0 {
 		fmtWarn.Println("Please specify target.")
 	} else if l == 1 {
+		addr := flag.Args()[0]
+		ip := lookupIP(addr)
+		tcpPing(ip, "22")
+		tcpPing(ip, "80")
+		tcpPing(ip, "443")
 	} else if l == 2 {
 		addr := flag.Args()[0]
 		port := flag.Args()[1]
@@ -69,18 +74,15 @@ func tcpPing(ip string, port string) {
 	if err != nil {
 		errType := catDialErr(err)
 		if errType == "refused" {
-			fmtWarn.Println("Target is reachable, but the port is closed.")
-			tcpAddr := strings.Join([]string{ip, ":", port}, "")
-			fmt.Println(tcpAddr)
+			fmtInfo.Printf(tcpAddr)
+			fmtWarn.Printf(" is reachable, but the port is closed.\n")
 		}
 		if errType == "timeout" {
-			fmtError.Println("Target is unreachable.")
-			tcpAddr := strings.Join([]string{ip, ":", port}, "")
-			fmt.Println(tcpAddr)
+			fmtInfo.Printf(tcpAddr)
+			fmtError.Printf(" is unreachable.\n")
 		}
 	} else {
-		fmtOK.Println("Target is reachable.")
-		tcpAddr := strings.Join([]string{ip, ":", port}, "")
-		fmt.Println(tcpAddr)
+		fmtInfo.Printf(tcpAddr)
+		fmtOK.Printf(" is reachable.\n")
 	}
 }
