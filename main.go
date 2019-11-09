@@ -13,12 +13,14 @@ import (
 
 // Global Variables
 var fmtOK *color.Color
+var fmtInfo *color.Color
 var fmtWarn *color.Color
 var fmtError *color.Color
 
 func init() {
 	// Set colorful fmt
 	fmtOK = color.New(color.FgGreen).Add(color.Bold)
+	fmtInfo = color.New(color.FgBlue).Add(color.Bold)
 	fmtWarn = color.New(color.FgYellow).Add(color.Bold)
 	fmtError = color.New(color.FgRed).Add(color.Bold)
 }
@@ -30,17 +32,11 @@ func main() {
 	if l == 0 {
 		fmtWarn.Println("Please specify target.")
 	} else if l == 1 {
-		// ICMP Ping
 	} else if l == 2 {
-		// TCP Ping
 		addr := flag.Args()[0]
 		port := flag.Args()[1]
-		tcpPing(addr, port)
-		ips, err := net.LookupIP("google.com")
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println(ips)
+		ip := lookupIP(addr)
+		tcpPing(ip, port)
 	} else {
 		fmtWarn.Println("Too many arguments.")
 	}
@@ -58,27 +54,33 @@ func catDialErr(err error) string {
 	return ""
 }
 
-func tcpPing(addr string, port string) {
-	tcpAddr := strings.Join([]string{addr, ":", port}, "")
+func lookupIP(addr string) string {
+	ips, err := net.LookupIP(addr)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return ips[0].String()
+}
+
+func tcpPing(ip string, port string) {
+	tcpAddr := strings.Join([]string{ip, ":", port}, "")
 	d := net.Dialer{Timeout: 3 * time.Second}
 	_, err := d.Dial("tcp", tcpAddr)
 	if err != nil {
-		//fmtError.Println("Error:", err.Error())
 		errType := catDialErr(err)
-		//fmt.Println(errType)
 		if errType == "refused" {
-			fmtWarn.Println("TCP is reachable, but the port is closed.")
-			tcpAddr := strings.Join([]string{addr, ":", port}, "")
+			fmtWarn.Println("Target is reachable, but the port is closed.")
+			tcpAddr := strings.Join([]string{ip, ":", port}, "")
 			fmt.Println(tcpAddr)
 		}
 		if errType == "timeout" {
-			fmtError.Println("TCP is unreachable.")
-			tcpAddr := strings.Join([]string{addr, ":", port}, "")
+			fmtError.Println("Target is unreachable.")
+			tcpAddr := strings.Join([]string{ip, ":", port}, "")
 			fmt.Println(tcpAddr)
 		}
 	} else {
-		fmtOK.Println("TCP is OK")
-		tcpAddr := strings.Join([]string{addr, ":", port}, "")
+		fmtOK.Println("Target is reachable.")
+		tcpAddr := strings.Join([]string{ip, ":", port}, "")
 		fmt.Println(tcpAddr)
 	}
 }
