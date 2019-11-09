@@ -35,36 +35,15 @@ func main() {
 		// TCP Ping
 		addr := flag.Args()[0]
 		port := flag.Args()[1]
-		err := tcpPing(addr, port)
+		tcpPing(addr, port)
+		ips, err := net.LookupIP("google.com")
 		if err != nil {
-			//fmtError.Println("Error:", err.Error())
-			errType := catDialErr(err)
-			//fmt.Println(errType)
-			if errType == "refused" {
-				fmtWarn.Println("TCP is reachable, but the port is closed.")
-				tcpAddr := strings.Join([]string{addr, ":", port}, "")
-				fmt.Println(tcpAddr)
-			}
-			if errType == "timeout" {
-				fmtError.Println("TCP is unreachable.")
-				tcpAddr := strings.Join([]string{addr, ":", port}, "")
-				fmt.Println(tcpAddr)
-			}
-		} else {
-			fmtOK.Println("TCP is OK")
-			tcpAddr := strings.Join([]string{addr, ":", port}, "")
-			fmt.Println(tcpAddr)
+			fmt.Println(err)
 		}
+		fmt.Println(ips)
 	} else {
 		fmtWarn.Println("Too many arguments.")
 	}
-}
-
-func tcpPing(addr string, port string) error {
-	tcpAddr := strings.Join([]string{addr, ":", port}, "")
-	d := net.Dialer{Timeout: 3 * time.Second}
-	_, err := d.Dial("tcp", tcpAddr)
-	return err
 }
 
 func catDialErr(err error) string {
@@ -77,4 +56,29 @@ func catDialErr(err error) string {
 		return "refused"
 	}
 	return ""
+}
+
+func tcpPing(addr string, port string) {
+	tcpAddr := strings.Join([]string{addr, ":", port}, "")
+	d := net.Dialer{Timeout: 3 * time.Second}
+	_, err := d.Dial("tcp", tcpAddr)
+	if err != nil {
+		//fmtError.Println("Error:", err.Error())
+		errType := catDialErr(err)
+		//fmt.Println(errType)
+		if errType == "refused" {
+			fmtWarn.Println("TCP is reachable, but the port is closed.")
+			tcpAddr := strings.Join([]string{addr, ":", port}, "")
+			fmt.Println(tcpAddr)
+		}
+		if errType == "timeout" {
+			fmtError.Println("TCP is unreachable.")
+			tcpAddr := strings.Join([]string{addr, ":", port}, "")
+			fmt.Println(tcpAddr)
+		}
+	} else {
+		fmtOK.Println("TCP is OK")
+		tcpAddr := strings.Join([]string{addr, ":", port}, "")
+		fmt.Println(tcpAddr)
+	}
 }
