@@ -28,21 +28,23 @@ func init() {
 func main() {
 	// Parse Args
 	flag.Parse()
-	l := len(flag.Args())
-	if l == 0 {
-		fmtWarn.Println("Please specify target.")
-	} else if l == 1 {
+
+	switch len(flag.Args()) {
+	case 0:
+		//fmtWarn.Println("Please specify target.")
+		helper()
+	case 1:
 		addr := flag.Args()[0]
 		ip := lookupIP(addr)
 		tcpPing(ip, "22")
 		tcpPing(ip, "80")
 		tcpPing(ip, "443")
-	} else if l == 2 {
+	case 2:
 		addr := flag.Args()[0]
 		port := flag.Args()[1]
 		ip := lookupIP(addr)
 		tcpPing(ip, port)
-	} else {
+	default:
 		fmtWarn.Println("Too many arguments.")
 	}
 }
@@ -85,4 +87,24 @@ func tcpPing(ip string, port string) {
 		fmtInfo.Printf(tcpAddr)
 		fmtOK.Printf(" is reachable.\n")
 	}
+}
+
+func helper() {
+	fmtInfo.Println("PingMe helper:")
+	fmt.Println()
+	fmtInfo.Println("1. Basic usage: pingme <ip> <port>")
+	fmt.Println("e.g. pingme google.com 443")
+	fmt.Println()
+	fmtInfo.Println("2. Input ip only: pingme <ip>")
+	fmt.Println("e.g. pingme facebook.com")
+	fmt.Println("PingMe will scan 3 common ports: 22, 80, 443")
+	fmt.Println()
+	fmtInfo.Println("3. Input URL: pingme <url>")
+	fmt.Println("e.g. pingme https://twitter.com")
+	fmt.Println("PingMe will scan 80 for http / 443 for https")
+	fmt.Println()
+	fmtInfo.Println("4. Add info flag: pingme -i <ip>")
+	fmt.Println("e.g. pingme -i https://wikipedia.org")
+	fmt.Println("PingMe will query detailed information about ip from https://pingme.cc")
+	fmt.Println()
 }
