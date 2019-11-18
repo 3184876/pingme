@@ -1,4 +1,4 @@
-module github.com/noobly314/pingme
+module github.com/noobly314/pingme-cli
 
 require (
 	github.com/fatih/color v1.7.0
