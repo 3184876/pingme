@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 
+	"github.com/noobly314/pingme-cli/ping"
 	"github.com/noobly314/pingme-cli/tcping"
 )
 
@@ -24,33 +25,27 @@ func main() {
 		addr := flag.Args()[0]
 		ip := lookupIP(addr)
 		address = ip + ":22"
-		logTcping(tcping.New(address), address)
+		c := tcping.New(address)
+		logTcping(c, address)
 		address = ip + ":80"
-		logTcping(tcping.New(address), address)
+		c = tcping.New(address)
+		logTcping(c, address)
 		address = ip + ":443"
-		logTcping(tcping.New(address), address)
+		c = tcping.New(address)
+		logTcping(c, address)
 	case 2:
 		addr := flag.Args()[0]
 		port := flag.Args()[1]
 		ip := lookupIP(addr)
 		address = ip + ":" + port
-		logTcping(tcping.New(address), address)
+		c := tcping.New(address)
+		logTcping(c, address)
 	default:
 		Log.Warn("Too many arguments.")
 	}
 
-	/*
-		// ICMP Ping
-		p := func(addr string) {
-			dst, dur, err := Ping(addr)
-			if err != nil {
-				log.Printf("Ping %s (%s): %s\n", addr, dst, err)
-				return
-			}
-			log.Printf("Ping %s (%s): %s\n", addr, dst, dur)
-		}
-		p("127.0.0.1")
-		p("baidu.com")
-		p("google.com")
-	*/
+	// ICMP Ping
+	addr := flag.Args()[0]
+	dst, dur, err := ping.New(addr)
+	logPing(dst, dur, err, addr)
 }

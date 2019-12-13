@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"net"
 	"os"
+	"time"
 
 	"github.com/sirupsen/logrus"
 )
@@ -24,4 +27,13 @@ func logTcping(code int, address string) {
 	} else if code == 2 {
 		Log.Warn("    ERROR     ", address)
 	}
+}
+
+func logPing(dst *net.IPAddr, dur time.Duration, err error, address string) {
+	if err != nil {
+		Log.Warn("Ping "+address+" ("+dst.String()+"): "+err.Error()+"\n", address, dst, err)
+		return
+	}
+	Log.Info("Ping "+address+" ("+dst.String()+") \n", address, dst)
+	fmt.Println(dur)
 }

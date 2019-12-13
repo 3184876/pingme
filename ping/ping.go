@@ -16,7 +16,7 @@ const (
 
 var ListenAddr = "0.0.0.0"
 
-func Ping(addr string) (*net.IPAddr, time.Duration, error) {
+func New(address string) (*net.IPAddr, time.Duration, error) {
 	// Start listening for icmp replies
 	c, err := icmp.ListenPacket("ip4:icmp", ListenAddr)
 	if err != nil {
@@ -25,7 +25,7 @@ func Ping(addr string) (*net.IPAddr, time.Duration, error) {
 	defer c.Close()
 
 	// Resolve address
-	dst, err := net.ResolveIPAddr("ip4", addr)
+	dst, err := net.ResolveIPAddr("ip4", address)
 	if err != nil {
 		fmt.Println(err)
 		return nil, 0, err
@@ -61,7 +61,7 @@ func Ping(addr string) (*net.IPAddr, time.Duration, error) {
 		return dst, 0, err
 	}
 	n, peer, err := c.ReadFrom(reply)
-	fmt.Println(peer)
+	//fmt.Println(peer)
 	if err != nil {
 		return dst, 0, err
 	}
