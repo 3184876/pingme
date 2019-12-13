@@ -24,10 +24,10 @@ func Ping(addr string) (*net.IPAddr, time.Duration, error) {
 	}
 	defer c.Close()
 
-	// Resolve any DNS (if used) and get the real IP of the target
+	// Resolve address
 	dst, err := net.ResolveIPAddr("ip4", addr)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 		return nil, 0, err
 	}
 
@@ -36,7 +36,7 @@ func Ping(addr string) (*net.IPAddr, time.Duration, error) {
 		Type: ipv4.ICMPTypeEcho,
 		Code: 0,
 		Body: &icmp.Echo{
-			ID: os.Getpid() & 0xffff, Seq: 1, //<< uint(seq), // TODO
+			ID: os.Getpid() & 0xffff, Seq: 1,
 			Data: []byte(""),
 		},
 	}
@@ -56,11 +56,12 @@ func Ping(addr string) (*net.IPAddr, time.Duration, error) {
 
 	// Wait for a reply
 	reply := make([]byte, 1500)
-	err = c.SetReadDeadline(time.Now().Add(10 * time.Second))
+	err = c.SetReadDeadline(time.Now().Add(3 * time.Second))
 	if err != nil {
 		return dst, 0, err
 	}
 	n, peer, err := c.ReadFrom(reply)
+	fmt.Println(peer)
 	if err != nil {
 		return dst, 0, err
 	}
@@ -71,10 +72,14 @@ func Ping(addr string) (*net.IPAddr, time.Duration, error) {
 	if err != nil {
 		return dst, 0, err
 	}
-	switch rm.Type {
-	case ipv4.ICMPTypeEchoReply:
-		return dst, duration, nil
-	default:
-		return dst, 0, fmt.Errorf("got %+v from %v; want echo reply", rm, peer)
-	}
+
+	return dst, duration, nil
+	/*
+		switch rm.Type {
+		case ipv4.ICMPTypeEchoReply:
+			return dst, duration, nil
+		default:
+			return dst, 0, fmt.Errorf("got %+v from %v; want echo reply", rm, peer)
+		}
+	*/
 }

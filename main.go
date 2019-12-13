@@ -43,4 +43,5 @@ func main() {
 	}
 	p("127.0.0.1")
 	p("baidu.com")
+	p("google.com")
 }
