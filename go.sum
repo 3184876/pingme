@@ -1,3 +1,5 @@
+github.com/aeden/traceroute v0.0.0-20181124220833-147686d9cb0f h1:LbPChgmEVYTHVg0zmAydDO3YNRgkt31svsI7LJ0crjs=
+github.com/aeden/traceroute v0.0.0-20181124220833-147686d9cb0f/go.mod h1:WwE/rUGG8pQ7L4JiBoNPCTZGQGWnciVaM+pXYfQR9ps=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/fatih/color v1.7.0 h1:DkWD4oS2D8LGGgTQ6IvwJJXSL5Vp2ffcQg58nFV38Ys=
 github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=
