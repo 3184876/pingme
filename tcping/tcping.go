@@ -3,25 +3,28 @@ package tcping
 import (
 	"net"
 	"regexp"
-	"strings"
 	"time"
 )
 
-func New(ip string, port string) {
-	address := strings.Join([]string{ip, ":", port}, "")
+func New(address string) int {
 	d := net.Dialer{Timeout: 3 * time.Second}
 	_, err := d.Dial("tcp", address)
 	if err != nil {
 		errType := getDialError(err)
 		if errType == "refused" {
-			Log.Warn("CLOSED    ", address)
+			// Closed
+			return 1
 		}
 		if errType == "timeout" {
-			Log.Warn("ERROR     ", address)
+			// Error
+			return 2
 		}
 	} else {
-		Log.Info("OPEN      ", address)
+		// Open
+		return 0
 	}
+	// Default
+	return 2
 }
 
 func getDialError(err error) string {
