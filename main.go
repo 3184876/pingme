@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"log"
+
+	"github.com/noobly314/pingme/tcping"
 )
 
 func init() {
@@ -20,14 +22,14 @@ func main() {
 	case 1:
 		addr := flag.Args()[0]
 		ip := lookupIP(addr)
-		tcping(ip, "22")
-		tcping(ip, "80")
-		tcping(ip, "443")
+		tcping.New(ip, "22")
+		tcping.New(ip, "80")
+		tcping.New(ip, "443")
 	case 2:
 		addr := flag.Args()[0]
 		port := flag.Args()[1]
 		ip := lookupIP(addr)
-		tcping(ip, port)
+		tcping.New(ip, port)
 	default:
 		Log.Warn("Too many arguments.")
 	}

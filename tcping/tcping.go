@@ -1,4 +1,4 @@
-package main
+package tcping
 
 import (
 	"net"
@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func tcping(ip string, port string) {
+func New(ip string, port string) {
 	address := strings.Join([]string{ip, ":", port}, "")
 	d := net.Dialer{Timeout: 3 * time.Second}
 	_, err := d.Dial("tcp", address)

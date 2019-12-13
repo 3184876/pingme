@@ -1,4 +1,4 @@
-package main
+package ping
 
 import (
 	"fmt"
@@ -73,13 +73,11 @@ func Ping(addr string) (*net.IPAddr, time.Duration, error) {
 		return dst, 0, err
 	}
 
-	return dst, duration, nil
-	/*
-		switch rm.Type {
-		case ipv4.ICMPTypeEchoReply:
-			return dst, duration, nil
-		default:
-			return dst, 0, fmt.Errorf("got %+v from %v; want echo reply", rm, peer)
-		}
-	*/
+	//return dst, duration, nil
+	switch rm.Type {
+	case ipv4.ICMPTypeEchoReply:
+		return dst, duration, nil
+	default:
+		return dst, 0, fmt.Errorf("got %+v from %v; want echo reply", rm, peer)
+	}
 }
