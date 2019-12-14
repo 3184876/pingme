@@ -25,7 +25,6 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
-
   build:
     runs-on: ubuntu-latest
     steps:
