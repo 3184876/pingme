@@ -10,6 +10,7 @@ var CommonPorts []string = []string{"22", "80", "443"}
 
 var PingDst string
 var TCPingDst string
+var MtrDst string
 var Query string
 
 var CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
@@ -22,6 +23,7 @@ var Usage = func() {
 func init_flag() {
 	flag.StringVar(&PingDst, "i", "", "ICMP destination")
 	flag.StringVar(&TCPingDst, "t", "", "TCP destination")
+	flag.StringVar(&MtrDst, "m", "", "MTR destination")
 	flag.StringVar(&Query, "q", "", "Query address")
 	flag.Parse()
 }

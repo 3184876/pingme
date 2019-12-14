@@ -43,3 +43,7 @@ func logPing(dst *net.IPAddr, dur time.Duration, err error) {
 	}
 	Log.Info(fmt.Sprintf("    ICMP    OPEN      %s    %s ms", dst.String(), strconv.FormatInt(dur.Milliseconds(), 10)))
 }
+
+func logMtr(hops []string, address string) {
+	Log.Info(hops)
+}

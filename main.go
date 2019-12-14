@@ -54,10 +54,17 @@ func main() {
 			c := tcping.New(address)
 			logTcping(c, address)
 		}
+		if isFlagPassed("m") {
+			// MTR
+			address := MtrDst
+			hops, err := mtr.New(address)
+			if err != nil {
+				Log.Fatal(err)
+			}
+			logMtr(hops, address)
+		}
 		if isFlagPassed("q") {
 			//fmt.Println(Query)
 		}
 	}
-
-	mtr.New("adf")
 }
