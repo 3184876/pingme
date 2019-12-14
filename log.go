@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"regexp"
+	"strconv"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -21,19 +23,23 @@ func init_log() {
 
 func logTcping(code int, address string) {
 	if code == 0 {
-		Log.Info("    OPEN      ", address)
+		Log.Info("    TCP     OPEN      ", address)
 	} else if code == 1 {
-		Log.Warn("    CLOSED    ", address)
+		Log.Warn("    TCP     CLOSED    ", address)
 	} else if code == 2 {
-		Log.Warn("    ERROR     ", address)
+		Log.Warn("    TCP     ERROR     ", address)
 	}
 }
 
-func logPing(dst *net.IPAddr, dur time.Duration, err error, address string) {
+func logPing(dst *net.IPAddr, dur time.Duration, err error) {
 	if err != nil {
-		Log.Warn("Ping "+address+" ("+dst.String()+"): "+err.Error()+"\n", address, dst, err)
+		match, _ := regexp.MatchString("operation not permitted", err.Error())
+		if match {
+			Log.Warn(fmt.Sprintf("    ICMP    ERROR     Root permission is required."))
+		} else {
+			Log.Warn(fmt.Sprintf("    ICMP    ERROR     %s", dst.String()))
+		}
 		return
 	}
-	Log.Info("Ping "+address+" ("+dst.String()+") \n", address, dst)
-	fmt.Println(dur)
+	Log.Info(fmt.Sprintf("    ICMP    OPEN      %s    %s ms", dst.String(), strconv.FormatInt(dur.Milliseconds(), 10)))
 }

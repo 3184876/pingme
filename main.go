@@ -24,6 +24,12 @@ func main() {
 	case 1:
 		addr := flag.Args()[0]
 		ip := lookupIP(addr)
+
+		// ICMP Ping
+		dst, dur, err := ping.New(addr)
+		logPing(dst, dur, err)
+
+		// TCP Ping
 		address = ip + ":22"
 		c := tcping.New(address)
 		logTcping(c, address)
@@ -43,9 +49,4 @@ func main() {
 	default:
 		Log.Warn("Too many arguments.")
 	}
-
-	// ICMP Ping
-	addr := flag.Args()[0]
-	dst, dur, err := ping.New(addr)
-	logPing(dst, dur, err, addr)
 }
