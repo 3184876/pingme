@@ -6,14 +6,14 @@ on:
       - '*'
 
 jobs:
-  create_release:
+  publish_release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@master
-      - name: Create Release
+      # checkout code
+      - uses: actions/checkout@master
+      # create release
+      - uses: actions/create-release@v1
         id: create_release
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -25,16 +25,22 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
+      # build binaries
       - uses: actions/setup-go@v1
         with:
           go-version: '1.13.5'
       - name: build
         run: go build -o pingme *.go
-      - name: collect artifacts
+      - name: create artifacts
         run: |
-          mkdir artifacts
-          mv pingme artifacts
+          zip --junk-paths pingme.zip README.md pingme
+      # upload binaries
+      - uses: actions/upload-release-asset@v1.0.1
+        id: upload-release-asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./pingme.zip
+          asset_name: pingme.zip
+          asset_content_type: application/zip
