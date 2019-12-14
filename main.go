@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 
+	"github.com/noobly314/pingme-cli/mtr"
 	"github.com/noobly314/pingme-cli/ping"
 	"github.com/noobly314/pingme-cli/tcping"
 )
@@ -14,8 +15,6 @@ func init() {
 
 func main() {
 	if !hasFlag() {
-		var address string
-
 		switch len(flag.Args()) {
 		case 0:
 			Log.Warn("Please specify target.")
@@ -24,24 +23,20 @@ func main() {
 			ip := lookupIP(addr)
 
 			// ICMP Ping
-			dst, dur, err := ping.New(addr)
+			dst, dur, err := ping.New(ip)
 			logPing(dst, dur, err)
 
 			// TCP Ping
-			address = ip + ":22"
-			c := tcping.New(address)
-			logTcping(c, address)
-			address = ip + ":80"
-			c = tcping.New(address)
-			logTcping(c, address)
-			address = ip + ":443"
-			c = tcping.New(address)
-			logTcping(c, address)
+			for _, port := range CommonPorts {
+				address := ip + ":" + port
+				c := tcping.New(address)
+				logTcping(c, address)
+			}
 		case 2:
 			addr := flag.Args()[0]
 			port := flag.Args()[1]
 			ip := lookupIP(addr)
-			address = ip + ":" + port
+			address := ip + ":" + port
 			c := tcping.New(address)
 			logTcping(c, address)
 		default:
@@ -63,4 +58,6 @@ func main() {
 			//fmt.Println(Query)
 		}
 	}
+
+	mtr.New("adf")
 }

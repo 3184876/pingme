@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net"
 	"regexp"
 )
@@ -14,21 +15,23 @@ func lookupIP(s string) string {
 	hostname := parseInput(s)
 	ips, err := net.LookupIP(hostname)
 	if err != nil {
+		fmt.Println(hostname)
+		fmt.Println(err)
 		Log.Fatal("IP address not found.")
 	}
 	return ips[0].String()
 }
 
 func parseInput(s string) string {
-	var hostname string
-
 	re := regexp.MustCompile(`^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)`)
 	results := re.FindStringSubmatch(s)
-	if len(results) == 2 {
-		hostname = results[1]
+	if len(results) == 0 {
+		return s
 	}
-
-	return hostname
+	if len(results) == 2 {
+		return results[1]
+	}
+	return ""
 }
 
 func isValidIP(s string) bool {
