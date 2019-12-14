@@ -13,7 +13,7 @@ func init() {
 }
 
 func main() {
-	if !isFlagPassed() {
+	if !hasFlag() {
 		var address string
 
 		switch len(flag.Args()) {
@@ -48,5 +48,19 @@ func main() {
 			Log.Warn("Too many arguments.")
 		}
 	} else {
+		if isFlagPassed("i") {
+			// ICMP Ping
+			dst, dur, err := ping.New(PingDst)
+			logPing(dst, dur, err)
+		}
+		if isFlagPassed("t") {
+			// TCP Ping
+			address := TCPingDst
+			c := tcping.New(address)
+			logTcping(c, address)
+		}
+		if isFlagPassed("q") {
+			//fmt.Println(Query)
+		}
 	}
 }
