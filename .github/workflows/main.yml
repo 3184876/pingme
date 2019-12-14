@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: actions/setup-go@master
       - name: build
         run: go build -o pingme *.go
       - name: collect artifacts
