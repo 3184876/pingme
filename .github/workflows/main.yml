@@ -1,0 +1,18 @@
+name: build
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: build
+        run: go build -o pingme *.go
+      - name: collect artifacts
+        run: |
+          mkdir artifacts
+          mv pingme artifacts
