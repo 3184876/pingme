@@ -45,5 +45,18 @@ func logPing(dst *net.IPAddr, dur time.Duration, err error) {
 }
 
 func logMtr(hops []string, address string) {
-	Log.Info(hops)
+	url := "https://pingme.cc/map/"
+
+	for _, h := range hops {
+		Log.Info("    MTR     ", h)
+		if url[len(url)-1] == 47 {
+			url += h
+		} else {
+			url += "%2C" + h
+		}
+	}
+
+	fmt.Println()
+	fmt.Println("View hops on map:")
+	fmt.Println(url)
 }

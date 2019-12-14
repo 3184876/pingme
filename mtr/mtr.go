@@ -20,6 +20,7 @@ func New(s string) ([]string, error) {
 		return []string{}, err
 	}
 	fmt.Println("Waiting for MTR results...")
+	fmt.Println()
 	out, err := exec.Command("mtr", "--raw", s).Output()
 	hops := parseOutput(out)
 	return hops, nil
