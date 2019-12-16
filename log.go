@@ -45,14 +45,17 @@ func logPing(dst *net.IPAddr, dur time.Duration, err error) {
 }
 
 func logMtr(hops []string, address string) {
-	url := "https://pingme.cc/map/"
+	url := "https://pingme.cc/path?ips="
 
+	fmt.Println()
 	for _, h := range hops {
 		Log.Info("    MTR     ", h)
-		if url[len(url)-1] == 47 {
-			url += h
-		} else {
-			url += "%2C" + h
+		if !isPrivateIPv4(h) && !isPrivateIPv6(h) {
+			if url[len(url)-1] == '=' {
+				url += h
+			} else {
+				url += "%2C" + h
+			}
 		}
 	}
 
