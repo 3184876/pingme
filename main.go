@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	VersionString string = "pingme v0.1.0"
+	VersionString string = "pingme v0.1.1"
 )
 
 func init() {
