@@ -39,7 +39,7 @@ jobs:
           tar -C $PWD -cvzf pingme-darwin-amd64.tar.gz pingme-darwin-amd64
       # upload binaries linux
       - uses: actions/upload-release-asset@v1.0.1
-        id: upload-release-asset
+        id: upload-release-asset-linux
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -49,7 +49,7 @@ jobs:
           asset_content_type: application/gzip
       # upload binaries darwin
       - uses: actions/upload-release-asset@v1.0.1
-        id: upload-release-asset
+        id: upload-release-asset-darwin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
