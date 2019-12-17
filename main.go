@@ -2,10 +2,15 @@ package main
 
 import (
 	"flag"
+	"fmt"
 
 	"github.com/noobly314/pingme-cli/mtr"
 	"github.com/noobly314/pingme-cli/ping"
 	"github.com/noobly314/pingme-cli/tcping"
+)
+
+const (
+	VersionString string = "pingme v0.1.0"
 )
 
 func init() {
@@ -43,6 +48,10 @@ func main() {
 			Log.Warn("Too many arguments.")
 		}
 	} else {
+		if isFlagPassed("v") {
+			// Version
+			fmt.Println(VersionString)
+		}
 		if isFlagPassed("i") {
 			// ICMP Ping
 			dst, dur, err := ping.New(PingDst)
