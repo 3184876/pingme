@@ -15,6 +15,7 @@ func serve() {
 
 	// Handler
 	r.GET("/", Hello)
+	r.GET("/all", GetAllData)
 
 	// Start
 	fmt.Println("Listening...")
@@ -26,11 +27,13 @@ func pingLoop() {
 		dst, dur, err := ping.New(PingDst)
 		logPing(dst, dur, err)
 		key := "ICMP"
+		key += ":" + strconv.FormatInt(time.Now().Unix(), 10)
 		key += ":" + PingDst
 		key += ":" + dst.String()
 		key += ":" + strconv.FormatInt(dur.Milliseconds(), 10)
-		key += ":" + strconv.FormatInt(time.Now().Unix(), 10)
-		//err = db.Put([]byte(key), []byte(""), nil)
-		//data, _ := db.Get([]byte("hostname"), nil)
+		err = db.Put([]byte(key), []byte(""), nil)
+		if err != nil {
+			log.Warn(err)
+		}
 	}
 }

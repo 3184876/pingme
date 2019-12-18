@@ -13,3 +13,15 @@ func init_db() {
 		log.Fatal(err)
 	}
 }
+
+func getAllData() []string {
+	var data []string
+
+	iter := db.NewIterator(nil, nil)
+	for iter.Next() {
+		key := iter.Key()
+		data = append(data, string(key))
+	}
+
+	return data
+}
