@@ -17,7 +17,7 @@ func lookupIP(s string) string {
 	if err != nil {
 		fmt.Println(hostname)
 		fmt.Println(err)
-		Log.Fatal("IP address not found.")
+		log.Fatal("IP address not found.")
 	}
 	return ips[0].String()
 }

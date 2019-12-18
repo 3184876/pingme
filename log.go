@@ -11,23 +11,23 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var Log = logrus.New()
+var log = logrus.New()
 
 func init_log() {
 	formatter := &logrus.TextFormatter{
 		DisableTimestamp: true,
 	}
-	Log.SetFormatter(formatter)
-	Log.Out = os.Stdout
+	log.SetFormatter(formatter)
+	log.Out = os.Stdout
 }
 
 func logTcping(code int, address string) {
 	if code == 0 {
-		Log.Info("    TCP     OPEN      ", address)
+		log.Info("    TCP     OPEN      ", address)
 	} else if code == 1 {
-		Log.Warn("    TCP     CLOSED    ", address)
+		log.Warn("    TCP     CLOSED    ", address)
 	} else if code == 2 {
-		Log.Warn("    TCP     ERROR     ", address)
+		log.Warn("    TCP     ERROR     ", address)
 	}
 }
 
@@ -35,17 +35,17 @@ func logPing(dst *net.IPAddr, dur time.Duration, err error) {
 	if err != nil {
 		match, _ := regexp.MatchString("operation not permitted", err.Error())
 		if match {
-			Log.Warn(fmt.Sprintf("    ICMP    ERROR     Root permission is required."))
+			log.Warn(fmt.Sprintf("    ICMP    ERROR     Root permission is required."))
 		} else {
-			Log.Warn(fmt.Sprintf("    ICMP    ERROR     %s", dst.String()))
+			log.Warn(fmt.Sprintf("    ICMP    ERROR     %s", dst.String()))
 		}
 		return
 	}
-	Log.Info(fmt.Sprintf("    ICMP    OPEN      %s    %s ms", dst.String(), strconv.FormatInt(dur.Milliseconds(), 10)))
+	log.Info(fmt.Sprintf("    ICMP    OPEN      %s    %s ms", dst.String(), strconv.FormatInt(dur.Milliseconds(), 10)))
 }
 
 func logMtr(hops []string, address string) {
 	for _, h := range hops {
-		Log.Info("    MTR     ", h)
+		log.Info("    MTR     ", h)
 	}
 }

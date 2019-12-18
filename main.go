@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/noobly314/pingme-cli/mtr"
-	"github.com/noobly314/pingme-cli/ping"
-	"github.com/noobly314/pingme-cli/tcping"
+	"github.com/noobly314/pingme/mtr"
+	"github.com/noobly314/pingme/ping"
+	"github.com/noobly314/pingme/tcping"
 )
 
 const (
@@ -16,13 +16,14 @@ const (
 func init() {
 	init_log()
 	init_flag()
+	init_db()
 }
 
 func main() {
 	if !hasFlag() {
 		switch len(flag.Args()) {
 		case 0:
-			Log.Warn("Please specify target.")
+			log.Warn("Please specify target.")
 		case 1:
 			addr := flag.Args()[0]
 			ip := lookupIP(addr)
@@ -45,12 +46,19 @@ func main() {
 			c := tcping.New(address)
 			logTcping(c, address)
 		default:
-			Log.Warn("Too many arguments.")
+			log.Warn("Too many arguments.")
 		}
 	} else {
 		if isFlagPassed("v") {
 			// Version
 			fmt.Println(VersionString)
+		}
+		if isFlagPassed("s") {
+			// Serve mode
+			serve()
+		}
+		if isFlagPassed("d") {
+			// Daemon mode
 		}
 		if isFlagPassed("i") {
 			// ICMP Ping
@@ -68,7 +76,7 @@ func main() {
 			address := MtrDst
 			hops, err := mtr.New(address)
 			if err != nil {
-				Log.Fatal(err)
+				log.Fatal(err)
 			}
 			logMtr(hops, address)
 		}
