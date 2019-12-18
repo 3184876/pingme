@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/noobly314/pingme/ping"
 )
@@ -12,6 +13,9 @@ import (
 func serve() {
 	// Set router
 	r := gin.Default()
+
+	// CORS
+	r.Use(cors.Default())
 
 	// Handler
 	r.GET("/", Hello)
