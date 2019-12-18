@@ -15,7 +15,7 @@ func serve() {
 
 	// Handler
 	r.GET("/", Hello)
-	r.GET("/all", GetAllData)
+	r.GET("/records", GetRecords)
 
 	// Start
 	fmt.Println("Listening...")
