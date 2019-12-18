@@ -16,7 +16,10 @@ const (
 func init() {
 	init_log()
 	init_flag()
-	init_db()
+	if isFlagPassed("c") {
+		init_config()
+		init_db()
+	}
 }
 
 func main() {
@@ -52,26 +55,30 @@ func main() {
 		if isFlagPassed("v") {
 			// Version
 			fmt.Println(VersionString)
-		}
-		if isFlagPassed("s") {
+		} else if isFlagPassed("s") {
 			// Serve mode
-			serve()
-		}
-		if isFlagPassed("d") {
+			if !isFlagPassed("c") {
+				log.Fatal("Please provide config file with -c flag.")
+			} else {
+				if !isFlagPassed("i") {
+					log.Fatal("Please provide target address with -i flag.")
+				} else {
+					go serve()
+					pingLoop()
+				}
+			}
+		} else if isFlagPassed("d") {
 			// Daemon mode
-		}
-		if isFlagPassed("i") {
+		} else if isFlagPassed("i") {
 			// ICMP Ping
 			dst, dur, err := ping.New(PingDst)
 			logPing(dst, dur, err)
-		}
-		if isFlagPassed("t") {
+		} else if isFlagPassed("t") {
 			// TCP Ping
 			address := TCPingDst
 			c := tcping.New(address)
 			logTcping(c, address)
-		}
-		if isFlagPassed("m") {
+		} else if isFlagPassed("m") {
 			// MTR
 			address := MtrDst
 			hops, err := mtr.New(address)
@@ -79,8 +86,7 @@ func main() {
 				log.Fatal(err)
 			}
 			logMtr(hops, address)
-		}
-		if isFlagPassed("q") {
+		} else if isFlagPassed("q") {
 			//fmt.Println(Query)
 		}
 	}

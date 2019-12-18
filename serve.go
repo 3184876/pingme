@@ -18,28 +18,19 @@ func serve() {
 
 	// Start
 	fmt.Println("Listening...")
-	go r.Run(":5000")
-
-	pingLoop()
+	r.Run(":" + strconv.Itoa(Config.ServePort))
 }
 
 func pingLoop() {
-	if !isFlagPassed("i") {
-		log.Fatal("Please provide target address with -i flag.")
-	} else {
-		// ICMP Ping
-		for {
-			dst, dur, err := ping.New(PingDst)
-			logPing(dst, dur, err)
-			keyStr := "ICMP"
-			keyStr += ":" + PingDst
-			keyStr += ":" + dst.String()
-			keyStr += ":" + strconv.FormatInt(dur.Milliseconds(), 10)
-			keyStr += ":" + strconv.FormatInt(time.Now().Unix(), 10)
-			fmt.Println(keyStr)
-			key := []byte(keyStr)
-			err = db.Put(key, []byte(""), nil)
-			//data, _ := db.Get([]byte("hostname"), nil)
-		}
+	for {
+		dst, dur, err := ping.New(PingDst)
+		logPing(dst, dur, err)
+		key := "ICMP"
+		key += ":" + PingDst
+		key += ":" + dst.String()
+		key += ":" + strconv.FormatInt(dur.Milliseconds(), 10)
+		key += ":" + strconv.FormatInt(time.Now().Unix(), 10)
+		//err = db.Put([]byte(key), []byte(""), nil)
+		//data, _ := db.Get([]byte("hostname"), nil)
 	}
 }
