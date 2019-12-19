@@ -61,7 +61,8 @@ func main() {
 				log.Fatal("Please provide config file with -c flag.")
 			} else {
 				if !isFlagPassed("i") {
-					log.Fatal("Please provide target address with -i flag.")
+					//log.Fatal("Please provide target address with -i flag.")
+					serve()
 				} else {
 					go serve()
 					pingLoop()

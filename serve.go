@@ -8,6 +8,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/noobly314/pingme/ping"
+	"golang.org/x/net/websocket"
 )
 
 func serve() {
@@ -20,6 +21,10 @@ func serve() {
 	// Handler
 	r.GET("/", Hello)
 	r.GET("/records", GetRecords)
+	r.GET("/ws", func(c *gin.Context) {
+		handler := websocket.Handler(Feed)
+		handler.ServeHTTP(c.Writer, c.Request)
+	})
 
 	// Start
 	fmt.Println("Listening...")
