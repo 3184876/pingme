@@ -4,6 +4,10 @@ import (
 	"fmt"
 	"net"
 	"regexp"
+	"strconv"
+	"time"
+
+	"github.com/noobly314/pingme/ping"
 )
 
 func lookupIP(s string) string {
@@ -47,4 +51,26 @@ func isPrivateIPv4(s string) bool {
 func isPrivateIPv6(s string) bool {
 	re := regexp.MustCompile(`(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))`)
 	return re.Match([]byte(s))
+}
+
+func pingLoop() {
+	ips, err := net.LookupIP(PingDst)
+	if err != nil {
+		log.Fatal("Cannot find ip.")
+	}
+	fmt.Println(ips)
+	for {
+		dst, dur, err := ping.New(ips[0].String())
+		logPing(dst, dur, err)
+		key := "ICMP"
+		key += ":" + strconv.FormatInt(time.Now().Unix(), 10)
+		key += ":" + PingDst
+		key += ":" + dst.String()
+		key += ":" + strconv.FormatInt(dur.Milliseconds(), 10)
+		err = db.Put([]byte(key), []byte(""), nil)
+		if err != nil {
+			log.Warn(err)
+		}
+		time.Sleep(time.Second)
+	}
 }

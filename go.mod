@@ -8,6 +8,7 @@ require (
 	github.com/mattn/go-colorable v0.1.4 // indirect
 	github.com/mattn/go-isatty v0.0.10 // indirect
 	github.com/sirupsen/logrus v1.4.2
+	github.com/sparrc/go-ping v0.0.0-20190613174326-4e5b6552494c
 	github.com/syndtr/goleveldb v1.0.0
 	go.etcd.io/bbolt v1.3.3
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553

@@ -5,7 +5,6 @@ import (
 	"net"
 	"os"
 	"regexp"
-	"strconv"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -41,7 +40,8 @@ func logPing(dst *net.IPAddr, dur time.Duration, err error) {
 		}
 		return
 	}
-	log.Info(fmt.Sprintf("    ICMP    OPEN      %s    %s ms", dst.String(), strconv.FormatInt(dur.Milliseconds(), 10)))
+	//log.Info(fmt.Sprintf("    ICMP    OPEN      %s    %s ms", dst.String(), strconv.FormatInt(dur.Microseconds(), 10)))
+	log.Info(fmt.Sprintf("    ICMP    OPEN      %s    %s ms", dst.String(), fmt.Sprintf("%.1f", float64(dur.Microseconds())/1000)))
 }
 
 func logMtr(hops []string, address string) {
