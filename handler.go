@@ -33,7 +33,7 @@ func GetRecords(c *gin.Context) {
 	c.JSON(200, data)
 }
 
-func Feed(ws *websocket.Conn) {
+func Stream(ws *websocket.Conn) {
 	var last_rec []byte
 	for {
 		now := time.Now().Unix()

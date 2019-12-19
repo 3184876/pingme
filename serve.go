@@ -20,7 +20,7 @@ func serve() {
 	r.GET("/", Hello)
 	r.GET("/records", GetRecords)
 	r.GET("/ws", func(c *gin.Context) {
-		handler := websocket.Handler(Feed)
+		handler := websocket.Handler(Stream)
 		handler.ServeHTTP(c.Writer, c.Request)
 	})
 
