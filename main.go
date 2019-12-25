@@ -88,7 +88,7 @@ func main() {
 			}
 			logMtr(hops, address)
 		} else if isFlagPassed("q") {
-			//fmt.Println(Query)
+			queryInfo(Query)
 		}
 	}
 }
