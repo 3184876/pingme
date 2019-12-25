@@ -20,6 +20,7 @@ func New(address string) (*net.IPAddr, time.Duration, error) {
 	// Start listening for icmp replies
 	c, err := icmp.ListenPacket("ip4:icmp", ListenAddr)
 	if err != nil {
+		fmt.Println(err)
 		return nil, 0, err
 	}
 	defer c.Close()

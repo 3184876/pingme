@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net"
 
 	"github.com/noobly314/pingme/mtr"
 	"github.com/noobly314/pingme/ping"
@@ -37,7 +38,7 @@ func main() {
 
 			// TCP Ping
 			for _, port := range CommonPorts {
-				address := ip + ":" + port
+				address := net.JoinHostPort(ip, port)
 				c := tcping.New(address)
 				logTcping(c, address)
 			}
@@ -45,7 +46,7 @@ func main() {
 			addr := flag.Args()[0]
 			port := flag.Args()[1]
 			ip := lookupIP(addr)
-			address := ip + ":" + port
+			address := net.JoinHostPort(ip, port)
 			c := tcping.New(address)
 			logTcping(c, address)
 		default:
