@@ -19,6 +19,8 @@ func init() {
 	init_flag()
 	if isFlagPassed("c") {
 		init_config()
+	}
+	if isFlagPassed("s") {
 		init_db()
 	}
 }
@@ -56,20 +58,17 @@ func main() {
 		if isFlagPassed("v") {
 			// Version
 			fmt.Println(VersionString)
-		} else if isFlagPassed("s") {
-			// Serve mode
-			if !isFlagPassed("c") {
-				log.Fatal("Please provide config file with -c flag.")
-			} else {
-				if !isFlagPassed("i") {
-					serve()
-				} else {
-					go serve()
-					pingLoop()
-				}
-			}
 		} else if isFlagPassed("d") {
 			// Daemon mode
+			startDaemon()
+		} else if isFlagPassed("s") {
+			// Serve mode
+			if !isFlagPassed("i") {
+				serve()
+			} else {
+				go serve()
+				pingLoop()
+			}
 		} else if isFlagPassed("i") {
 			// ICMP Ping
 			dst, dur, err := ping.New(PingDst)
@@ -86,8 +85,8 @@ func main() {
 			}
 			logMtr(hops, MtrDst)
 		} else if isFlagPassed("q") {
-			ip := lookupIP(Query)
-			queryInfo(ip)
+			address := parseInput(Query)
+			queryInfo(address)
 		}
 	}
 }

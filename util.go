@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net"
+	"os"
+	"os/exec"
 	"regexp"
 	"strconv"
 	"time"
@@ -73,4 +75,20 @@ func pingLoop() {
 		}
 		time.Sleep(time.Second)
 	}
+}
+
+func startDaemon() {
+	args := os.Args[1:]
+	for i := 0; i < len(args); i++ {
+		if args[i] == "-d" {
+			l := len(args)
+			args = args[0:i]
+			args = append(args, args[i+1:l]...)
+			break
+		}
+	}
+	cmd := exec.Command(os.Args[0], args...)
+	cmd.Start()
+	log.Info("[PID]", cmd.Process.Pid)
+	os.Exit(0)
 }

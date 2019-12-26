@@ -20,10 +20,10 @@ type IPInfo struct {
 	AS      string `json:"as"`
 }
 
-func queryInfo(ip string) {
+func queryInfo(address string) {
 	var info IPInfo
 
-	res, err := http.Get(API + ip)
+	res, err := http.Get(API + address)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -11,7 +11,10 @@ type ConfigData struct {
 	ServePort int    `json:"serve_port"`
 }
 
-var Config ConfigData
+var Config ConfigData = ConfigData{
+	DBFile:    "test.db",
+	ServePort: 5000,
+}
 
 func init_config() {
 	jsonData, err := ioutil.ReadFile(ConfigFile)
