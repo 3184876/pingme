@@ -10,8 +10,8 @@ import (
 	"github.com/noobly314/pingme/tcping"
 )
 
-const (
-	VersionString string = "pingme v0.1.1"
+var (
+	VersionString string
 )
 
 func init() {

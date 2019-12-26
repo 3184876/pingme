@@ -33,8 +33,8 @@ jobs:
         run: |
           mkdir pingme-linux-amd64
           mkdir pingme-darwin-amd64
-          env GOOS=linux GOARCH=amd64 go build -o pingme-linux-amd64/pingme *.go
-          env GOOS=darwin GOARCH=amd64 go build -o pingme-darwin-amd64/pingme *.go
+          env VERSION=$(echo ${GITHUB_REF:10}) GIN_MODE=release GOOS=linux GOARCH=amd64 bash -c 'go build -ldflags "-X main.VersionString=$VERSION" -o pingme-linux-amd64/pingme *.go'
+          env VERSION=$(echo ${GITHUB_REF:10}) GIN_MODE=release GOOS=darwin GOARCH=amd64 bash -c 'go build -ldflags "-X main.VersionString=$VERSION" -o pingme-darwin-amd64/pingme *.go'
           tar -C $PWD -cvzf pingme-linux-amd64.tar.gz pingme-linux-amd64
           tar -C $PWD -cvzf pingme-darwin-amd64.tar.gz pingme-darwin-amd64
       # upload binaries linux
