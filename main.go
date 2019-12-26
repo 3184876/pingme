@@ -62,7 +62,6 @@ func main() {
 				log.Fatal("Please provide config file with -c flag.")
 			} else {
 				if !isFlagPassed("i") {
-					//log.Fatal("Please provide target address with -i flag.")
 					serve()
 				} else {
 					go serve()
@@ -77,19 +76,18 @@ func main() {
 			logPing(dst, dur, err)
 		} else if isFlagPassed("t") {
 			// TCP Ping
-			address := TCPingDst
-			c := tcping.New(address)
-			logTcping(c, address)
+			c := tcping.New(TCPingDst)
+			logTcping(c, TCPingDst)
 		} else if isFlagPassed("m") {
 			// MTR
-			address := MtrDst
-			hops, err := mtr.New(address)
+			hops, err := mtr.New(MtrDst)
 			if err != nil {
 				log.Fatal(err)
 			}
-			logMtr(hops, address)
+			logMtr(hops, MtrDst)
 		} else if isFlagPassed("q") {
-			queryInfo(Query)
+			ip := lookupIP(Query)
+			queryInfo(ip)
 		}
 	}
 }

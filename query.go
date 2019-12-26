@@ -13,7 +13,6 @@ const (
 )
 
 type IPInfo struct {
-	Query   string
 	IP      string `json:"query"`
 	City    string `json:"city"`
 	Country string `json:"country"`
@@ -21,13 +20,10 @@ type IPInfo struct {
 	AS      string `json:"as"`
 }
 
-func queryInfo(q string) {
+func queryInfo(ip string) {
 	var info IPInfo
 
-	query := parseInput(q)
-	info.Query = query
-
-	res, err := http.Get(API + query)
+	res, err := http.Get(API + ip)
 	if err != nil {
 		log.Fatal(err)
 	}

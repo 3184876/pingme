@@ -34,13 +34,12 @@ func logPing(dst *net.IPAddr, dur time.Duration, err error) {
 	if err != nil {
 		match, _ := regexp.MatchString("operation not permitted", err.Error())
 		if match {
-			log.Warn(fmt.Sprintf("    ICMP    ERROR     Root permission is required."))
+			log.Warn(fmt.Sprintf("    ICMP    ERROR     No privileges"))
 		} else {
 			log.Warn(fmt.Sprintf("    ICMP    ERROR     %s", dst.String()))
 		}
 		return
 	}
-	//log.Info(fmt.Sprintf("    ICMP    OPEN      %s    %s ms", dst.String(), strconv.FormatInt(dur.Microseconds(), 10)))
 	log.Info(fmt.Sprintf("    ICMP    OPEN      %s    %s ms", dst.String(), fmt.Sprintf("%.1f", float64(dur.Microseconds())/1000)))
 }
 
