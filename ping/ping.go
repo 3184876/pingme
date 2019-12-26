@@ -8,33 +8,68 @@ import (
 
 	"golang.org/x/net/icmp"
 	"golang.org/x/net/ipv4"
+	"golang.org/x/net/ipv6"
 )
 
-const (
-	ProtocolICMP = 1
-)
+type IPType struct {
+	Type               string
+	ListenAddr         string
+	Network            string
+	ICMPNetwork        string
+	ProtocolNumber     int
+	RequestMessageType icmp.Type
+	ReplyMessageType   icmp.Type
+}
 
-var ListenAddr = "0.0.0.0"
+var (
+	IPType4 = IPType{
+		Type:               "4",
+		ListenAddr:         "0.0.0.0",
+		Network:            "ip4",
+		ICMPNetwork:        "ip4:icmp",
+		ProtocolNumber:     1,
+		RequestMessageType: ipv4.ICMPTypeEcho,
+		ReplyMessageType:   ipv4.ICMPTypeEchoReply,
+	}
+	IPType6 = IPType{
+		Type:               "6",
+		ListenAddr:         "::",
+		Network:            "ip6",
+		ICMPNetwork:        "ip6:ipv6-icmp",
+		ProtocolNumber:     58,
+		RequestMessageType: ipv6.ICMPTypeEchoRequest,
+		ReplyMessageType:   ipv6.ICMPTypeEchoReply,
+	}
+)
 
 func New(address string) (*net.IPAddr, time.Duration, error) {
-	// Start listening for icmp replies
-	c, err := icmp.ListenPacket("ip4:icmp", ListenAddr)
+	// Check ip type
+	// Resolve address
+	var err error
+	var dst *net.IPAddr
+	var ipType IPType
+	dst, err = net.ResolveIPAddr("ip4", address)
 	if err != nil {
-		fmt.Println(err)
+		dst, err = net.ResolveIPAddr("ip6", address)
+		if err != nil {
+			return nil, 0, err
+		} else {
+			ipType = IPType6
+		}
+	} else {
+		ipType = IPType4
+	}
+
+	// Start listening for icmp replies
+	c, err := icmp.ListenPacket(ipType.ICMPNetwork, ipType.ListenAddr)
+	if err != nil {
 		return nil, 0, err
 	}
 	defer c.Close()
 
-	// Resolve address
-	dst, err := net.ResolveIPAddr("ip4", address)
-	if err != nil {
-		fmt.Println(err)
-		return nil, 0, err
-	}
-
 	// Make a new ICMP message
 	m := icmp.Message{
-		Type: ipv4.ICMPTypeEcho,
+		Type: ipType.RequestMessageType,
 		Code: 0,
 		Body: &icmp.Echo{
 			ID: os.Getpid() & 0xffff, Seq: 1,
@@ -62,23 +97,24 @@ func New(address string) (*net.IPAddr, time.Duration, error) {
 		return dst, 0, err
 	}
 	n, peer, err := c.ReadFrom(reply)
-	//fmt.Println(peer)
 	if err != nil {
 		return dst, 0, err
 	}
 	duration := time.Since(start)
 
 	// Pack it up boys, we're done here
-	rm, err := icmp.ParseMessage(ProtocolICMP, reply[:n])
+	rm, err := icmp.ParseMessage(ipType.ProtocolNumber, reply[:n])
 	if err != nil {
 		return dst, 0, err
 	}
 
 	//return dst, duration, nil
 	switch rm.Type {
-	case ipv4.ICMPTypeEchoReply:
+	case ipType.ReplyMessageType:
 		return dst, duration, nil
 	default:
 		return dst, 0, fmt.Errorf("got %+v from %v; want echo reply", rm, peer)
 	}
+
+	return dst, 0, err
 }
