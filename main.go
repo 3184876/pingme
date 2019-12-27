@@ -17,12 +17,6 @@ var (
 func init() {
 	init_log()
 	init_flag()
-	if isFlagPassed("c") {
-		init_config()
-	}
-	if isFlagPassed("s") {
-		init_db()
-	}
 }
 
 func main() {
@@ -33,6 +27,11 @@ func main() {
 		case 1:
 			addr := flag.Args()[0]
 			ip := lookupIP(addr)
+
+			// Query
+			address := parseInput(addr)
+			queryInfo(address)
+			fmt.Println()
 
 			// ICMP Ping
 			dst, dur, err := ping.New(ip)
@@ -58,17 +57,6 @@ func main() {
 		if isFlagPassed("v") {
 			// Version
 			fmt.Println(VersionString)
-		} else if isFlagPassed("d") {
-			// Daemon mode
-			startDaemon()
-		} else if isFlagPassed("s") {
-			// Serve mode
-			if !isFlagPassed("i") {
-				serve()
-			} else {
-				go serve()
-				pingLoop()
-			}
 		} else if isFlagPassed("i") {
 			// ICMP Ping
 			dst, dur, err := ping.New(PingDst)

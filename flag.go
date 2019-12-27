@@ -15,7 +15,6 @@ var PingDst string
 var TCPingDst string
 var MtrDst string
 var Query string
-var ConfigFile string
 
 var CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 
@@ -32,7 +31,6 @@ func init_flag() {
 	flag.StringVar(&TCPingDst, "t", "", "TCP destination")
 	flag.StringVar(&MtrDst, "m", "", "MTR destination")
 	flag.StringVar(&Query, "q", "", "Query address")
-	flag.StringVar(&ConfigFile, "c", "", "Config file")
 	flag.Parse()
 }
 
