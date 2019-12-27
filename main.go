@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 
+	"github.com/noobly314/pingme/httping"
 	"github.com/noobly314/pingme/mtr"
 	"github.com/noobly314/pingme/ping"
 	"github.com/noobly314/pingme/tcping"
@@ -65,6 +66,11 @@ func main() {
 			// TCP Ping
 			c := tcping.New(TCPingDst)
 			logTcping(c, TCPingDst)
+		} else if isFlagPassed("h") {
+			// HTTP Ping
+			_ = httping.New(HTTPingDst)
+			//c := httping.New(HTTPingDst)
+			//logHttping(c, HTTPingDst)
 		} else if isFlagPassed("m") {
 			// MTR
 			hops, err := mtr.New(MtrDst)

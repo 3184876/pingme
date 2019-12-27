@@ -20,6 +20,10 @@ func init_log() {
 	log.Out = os.Stdout
 }
 
+func logHttping(code int, address string) {
+	log.Info("    HTTP     OPEN      ", address)
+}
+
 func logTcping(code int, address string) {
 	if code == 0 {
 		log.Info("    TCP     OPEN      ", address)

@@ -13,6 +13,7 @@ var IsServe bool
 var IsDaemon bool
 var PingDst string
 var TCPingDst string
+var HTTPingDst string
 var MtrDst string
 var Query string
 
@@ -29,6 +30,7 @@ func init_flag() {
 	flag.BoolVar(&Version, "d", false, "Daemon mode")
 	flag.StringVar(&PingDst, "i", "", "ICMP destination")
 	flag.StringVar(&TCPingDst, "t", "", "TCP destination")
+	flag.StringVar(&HTTPingDst, "h", "", "HTTP destination")
 	flag.StringVar(&MtrDst, "m", "", "MTR destination")
 	flag.StringVar(&Query, "q", "", "Query address")
 	flag.Parse()
