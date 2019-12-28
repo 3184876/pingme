@@ -70,7 +70,7 @@ $ sudo chmod u+s pingme
 ```
 
 # License
-See the LICENSE file for license rights and limitations (MIT).
+See the [LICENSE](https://github.com/noobly314/pingme/blob/master/LICENSE.md) file for license rights and limitations (MIT).
 
 # Acknowledgements
 [httpstat](https://github.com/davecheney/httpstat)
