@@ -72,7 +72,7 @@ func New(address string) (Stats, error) {
 	}
 
 	stats.DNS = t1 - t0
-	stats.TCP = t3 - t1
+	stats.TCP = t2 - t1
 	stats.Process = t4 - t3
 	stats.Transfer = t7 - t4
 	stats.TLS = t6 - t5
