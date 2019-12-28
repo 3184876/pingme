@@ -23,20 +23,23 @@ func init_log() {
 
 func logHttping(stats httping.Stats, err error, address string) {
 	if err == nil {
-		fmt.Println("scheme: ", stats.Scheme)
 		if stats.Scheme == "http" {
-			log.Info("    Host               ", parseInput(address))
-			log.Info("    DNS Lookup         ", stats.DNS/1e6)
-			log.Info("    TCP                ", stats.TCP/1e6)
-			log.Info("    Total              ", stats.Total/1e6)
+			fmt.Printf("Scheme    :    %s\n", stats.Scheme)
+			fmt.Printf("Host      :    %s\n", parseInput(address))
+			fmt.Printf("DNS Lookup:    %.2f ms\n", float64(stats.DNS)/1e6)
+			fmt.Printf("TCP       :    %.2f ms\n", float64(stats.TCP)/1e6)
+			fmt.Printf("Process   :    %.2f ms\n", float64(stats.Process)/1e6)
+			fmt.Printf("Transfer  :    %.2f ms\n", float64(stats.Transfer)/1e6)
+			fmt.Printf("Total     :    %.2f ms\n", float64(stats.Total)/1e6)
 		} else if stats.Scheme == "https" {
-			log.Info("    Host               ", parseInput(address))
-			log.Info("    DNS Lookup         ", stats.DNS/1e6)
-			log.Info("    TCP                ", stats.TCP/1e6)
-			log.Info("    TLS                ", stats.TLS/1e6)
-			log.Info("    Process            ", stats.Process/1e6)
-			log.Info("    Transfer           ", stats.Transfer/1e6)
-			log.Info("    Total              ", stats.Total/1e6)
+			fmt.Printf("Scheme    :    %s\n", stats.Scheme)
+			fmt.Printf("Host      :    %s\n", parseInput(address))
+			fmt.Printf("DNS Lookup:    %.2f ms\n", float64(stats.DNS)/1e6)
+			fmt.Printf("TCP       :    %.2f ms\n", float64(stats.TCP)/1e6)
+			fmt.Printf("TLS       :    %.2f ms\n", float64(stats.TLS)/1e6)
+			fmt.Printf("Process   :    %.2f ms\n", float64(stats.Process)/1e6)
+			fmt.Printf("Transfer  :    %.2f ms\n", float64(stats.Transfer)/1e6)
+			fmt.Printf("Total     :    %.2f ms\n", float64(stats.Total)/1e6)
 		}
 	}
 }

@@ -2,7 +2,6 @@ package httping
 
 import (
 	"crypto/tls"
-	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptrace"
@@ -25,24 +24,12 @@ func New(address string) (Stats, error) {
 	var stats Stats
 	var t0, t1, t2, t3, t4, t5, t6, t7 int64
 
-	if strings.HasPrefix(address, "http://") {
-		stats.Scheme = "http"
-	} else if strings.HasPrefix(address, "https://") {
-		stats.Scheme = "https"
-	} else {
-		address = "http://" + address
-		stats.Scheme = "http"
-	}
-	fmt.Println("address: ", address)
-
 	req, _ := http.NewRequest("GET", address, nil)
 	trace := &httptrace.ClientTrace{
 		DNSStart: func(info httptrace.DNSStartInfo) {
-			//fmt.Printf("DNS Start Info: %+v\n", info)
 			t0 = time.Now().UnixNano()
 		},
 		DNSDone: func(info httptrace.DNSDoneInfo) {
-			//fmt.Printf("DNS Done Info: %+v\n", info)
 			t1 = time.Now().UnixNano()
 			if info.Err != nil {
 				err = info.Err
@@ -58,7 +45,6 @@ func New(address string) (Stats, error) {
 			t2 = time.Now().UnixNano()
 		},
 		GotConn: func(info httptrace.GotConnInfo) {
-			//fmt.Printf("Got Conn: %+v\n", info)
 			t3 = time.Now().UnixNano()
 		},
 		GotFirstResponseByte: func() {
@@ -78,6 +64,12 @@ func New(address string) (Stats, error) {
 	}
 
 	t7 = time.Now().UnixNano()
+
+	if strings.HasPrefix(address, "http://") {
+		stats.Scheme = "http"
+	} else if strings.HasPrefix(address, "https://") {
+		stats.Scheme = "https"
+	}
 
 	stats.DNS = t1 - t0
 	stats.TCP = t3 - t1
