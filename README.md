@@ -1,56 +1,61 @@
-# pingme
+# Introduction
 
-# Intro
+Pingme is lightweight ping probe command line tool, supporting ICMP, TCP and HTTP protocols.
 
-Pingme is lightweight ping probe tool, supporting ICMP and TCP protocols.
+It can also query IP information from third-party api provider (currently we use [https://ip-api.com](https://ip-api.com)).
 
 # Features
 
-- Support ICMP/TCP protocols
-- Display basic IP information
-- Monitor real-time ping statistics
+- Support ICMP/TCP/HTTP protocols
+- Query basic IP information
 
 # Usage
 
 ```
-  -c string
-        Config file
-  -d    Daemon mode
+  -h string
+        HTTP Ping
   -i string
-        ICMP destination
+        ICMP Ping
   -m string
-        MTR destination
+        MTR Trace
   -q string
-        Query address
-  -s    Serve mode
+        Query ip information
   -t string
-        TCP destination
+        TCP Ping
   -v    Version
 ```
 
 # Examples
 
 ```
-// If only address is provided, pingme will probe some common ports.
-$ pingme google.com
-INFO     ICMP    OPEN      2404:6800:4003:c01::8a    2.4 ms
-WARN     TCP     ERROR     [2404:6800:4003:c01::8a]:22
-INFO     TCP     OPEN      [2404:6800:4003:c01::8a]:80
-INFO     TCP     OPEN      [2404:6800:4003:c01::8a]:443
-
-// Url can be passed to pingme in query mode.
-// This feature is designed for convenient copy & paste.
-$ pingme -q https://www.google.com/
-IP     :    2404:6800:4003:c03::93
-City   :    Singapore
-Country:    Singapore
+// If only address is provided, pingme will probe some common scan.
+$ pingme https://www.google.com
+IP     :    74.125.24.105
+City   :    Ashburn
+Country:    United States
 ISP    :    Google LLC
 AS     :    AS15169 Google LLC
 
-// You can specify any port in tcping mode.
-$ pingme -t google.com:12345
-WARN     TCP     ERROR     google.com:12345
+ICMP    OPEN      2404:6800:4003:c03::67    2.0 ms
 
+TCP     ERROR     [2404:6800:4003:c03::67]:22
+TCP     OPEN      [2404:6800:4003:c03::67]:80
+TCP     OPEN      [2404:6800:4003:c03::67]:443
+
+Scheme    :    https
+Host      :    www.google.com
+DNS Lookup:    0.86 ms
+TCP       :    55.87 ms
+TLS       :    54.13 ms
+Process   :    31.72 ms
+Transfer  :    0.26 ms
+Total     :    88.71 ms
+```
+
+```
+// You can specify any ports in tcping mode.
+$ pingme -t google.com:12345
+TCP     ERROR     google.com:12345
 ```
 
 # Note
@@ -70,7 +75,15 @@ $ sudo chmod u+s pingme
 ```
 
 # License
+
 See the [LICENSE](https://github.com/noobly314/pingme/blob/master/LICENSE.md) file for license rights and limitations (MIT).
 
 # Acknowledgements
-[httpstat](https://github.com/davecheney/httpstat)
+
+[https://ip-api.com](https://ip-api.com)
+
+[lmas/icmp_ping.go](https://gist.github.com/lmas/c13d1c9de3b2224f9c26435eb56e6ef3)
+
+[sparrc/go-ping](https://github.com/sparrc/go-ping)
+
+[davecheney/httpstat](https://github.com/davecheney/httpstat)
