@@ -46,11 +46,11 @@ func logHttping(stats httping.Stats, err error, address string) {
 
 func logTcping(code int, address string) {
 	if code == 0 {
-		log.Info("    TCP     OPEN      ", address)
+		fmt.Printf("TCP     OPEN      %s\n", address)
 	} else if code == 1 {
-		log.Warn("    TCP     CLOSED    ", address)
+		fmt.Printf("TCP     CLOSED    %s\n", address)
 	} else if code == 2 {
-		log.Warn("    TCP     ERROR     ", address)
+		fmt.Printf("TCP     ERROR     %s\n", address)
 	}
 }
 
@@ -58,17 +58,17 @@ func logPing(dst *net.IPAddr, dur time.Duration, err error) {
 	if err != nil {
 		match, _ := regexp.MatchString("operation not permitted", err.Error())
 		if match {
-			log.Warn(fmt.Sprintf("    ICMP    ERROR     No privileges"))
+			fmt.Printf("ICMP    ERROR     No privileges\n")
 		} else {
-			log.Warn(fmt.Sprintf("    ICMP    ERROR     %s", dst.String()))
+			fmt.Printf("ICMP    ERROR     %s\n", dst.String())
 		}
 		return
 	}
-	log.Info(fmt.Sprintf("    ICMP    OPEN      %s    %s ms", dst.String(), fmt.Sprintf("%.1f", float64(dur.Microseconds())/1000)))
+	fmt.Printf("ICMP    OPEN      %s    %s ms\n", dst.String(), fmt.Sprintf("%.1f", float64(dur.Microseconds())/1000))
 }
 
 func logMtr(hops []string, address string) {
 	for _, h := range hops {
-		log.Info("    MTR     ", h)
+		fmt.Printf("MTR     %s\n", h)
 	}
 }

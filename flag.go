@@ -9,8 +9,6 @@ import (
 var CommonPorts []string = []string{"22", "80", "443"}
 
 var Version bool
-var IsServe bool
-var IsDaemon bool
 var PingDst string
 var TCPingDst string
 var HTTPingDst string
@@ -26,13 +24,11 @@ var Usage = func() {
 
 func init_flag() {
 	flag.BoolVar(&Version, "v", false, "Version")
-	flag.BoolVar(&Version, "s", false, "Serve mode")
-	flag.BoolVar(&Version, "d", false, "Daemon mode")
-	flag.StringVar(&PingDst, "i", "", "ICMP destination")
-	flag.StringVar(&TCPingDst, "t", "", "TCP destination")
-	flag.StringVar(&HTTPingDst, "h", "", "HTTP destination")
-	flag.StringVar(&MtrDst, "m", "", "MTR destination")
-	flag.StringVar(&Query, "q", "", "Query address")
+	flag.StringVar(&PingDst, "i", "", "ICMP Ping")
+	flag.StringVar(&TCPingDst, "t", "", "TCP Ping")
+	flag.StringVar(&HTTPingDst, "h", "", "HTTP Ping")
+	flag.StringVar(&MtrDst, "m", "", "MTR Trace")
+	flag.StringVar(&Query, "q", "", "Query ip information")
 	flag.Parse()
 }
 

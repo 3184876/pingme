@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"net"
+	"strings"
 
 	"github.com/noobly314/pingme/httping"
 	"github.com/noobly314/pingme/mtr"
@@ -24,7 +25,7 @@ func main() {
 	if !hasFlag() {
 		switch len(flag.Args()) {
 		case 0:
-			log.Warn("Please specify target.")
+			flag.PrintDefaults()
 		case 1:
 			addr := flag.Args()[0]
 			ip := lookupIP(addr)
@@ -37,12 +38,20 @@ func main() {
 			// ICMP Ping
 			dst, dur, err := ping.New(ip)
 			logPing(dst, dur, err)
+			fmt.Println()
 
 			// TCP Ping
 			for _, port := range CommonPorts {
 				address := net.JoinHostPort(ip, port)
 				c := tcping.New(address)
 				logTcping(c, address)
+			}
+			fmt.Println()
+
+			// HTTP Ping
+			if strings.HasPrefix(addr, "http://") || strings.HasPrefix(addr, "https://") {
+				stats, err := httping.New(addr)
+				logHttping(stats, err, addr)
 			}
 		case 2:
 			addr := flag.Args()[0]
