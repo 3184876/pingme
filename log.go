@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"time"
 
+	"github.com/noobly314/pingme/httping"
 	"github.com/sirupsen/logrus"
 )
 
@@ -20,8 +21,24 @@ func init_log() {
 	log.Out = os.Stdout
 }
 
-func logHttping(code int, address string) {
-	log.Info("    HTTP     OPEN      ", address)
+func logHttping(stats httping.Stats, err error, address string) {
+	if err == nil {
+		fmt.Println("scheme: ", stats.Scheme)
+		if stats.Scheme == "http" {
+			log.Info("    Host               ", parseInput(address))
+			log.Info("    DNS Lookup         ", stats.DNS/1e6)
+			log.Info("    TCP                ", stats.TCP/1e6)
+			log.Info("    Total              ", stats.Total/1e6)
+		} else if stats.Scheme == "https" {
+			log.Info("    Host               ", parseInput(address))
+			log.Info("    DNS Lookup         ", stats.DNS/1e6)
+			log.Info("    TCP                ", stats.TCP/1e6)
+			log.Info("    TLS                ", stats.TLS/1e6)
+			log.Info("    Process            ", stats.Process/1e6)
+			log.Info("    Transfer           ", stats.Transfer/1e6)
+			log.Info("    Total              ", stats.Total/1e6)
+		}
+	}
 }
 
 func logTcping(code int, address string) {

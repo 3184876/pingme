@@ -68,3 +68,9 @@ $ sudo chown root:root pingme
 $ sudo chmod u+s pingme
 
 ```
+
+# License
+See the LICENSE file for license rights and limitations (MIT).
+
+# Acknowledgements
+[httpstat](https://github.com/davecheney/httpstat)

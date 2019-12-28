@@ -68,9 +68,8 @@ func main() {
 			logTcping(c, TCPingDst)
 		} else if isFlagPassed("h") {
 			// HTTP Ping
-			_ = httping.New(HTTPingDst)
-			//c := httping.New(HTTPingDst)
-			//logHttping(c, HTTPingDst)
+			stats, err := httping.New(HTTPingDst)
+			logHttping(stats, err, HTTPingDst)
 		} else if isFlagPassed("m") {
 			// MTR
 			hops, err := mtr.New(MtrDst)
