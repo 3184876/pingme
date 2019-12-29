@@ -6,6 +6,7 @@ import (
 	"os"
 	"reflect"
 	"regexp"
+	"strconv"
 	"time"
 
 	"github.com/fatih/color"
@@ -33,6 +34,7 @@ func init_log() {
 
 func logHttping(stats httping.Stats, err error, address string) {
 	if err == nil {
+		fmt.Printf("%s:    %s\n", cyan("%-10s", "Proxy"), strconv.FormatBool(stats.Proxy))
 		fmt.Printf("%s:    %s\n", cyan("%-10s", "Scheme"), stats.Scheme)
 		fmt.Printf("%s:    %s\n", cyan("%-10s", "Host"), parseInput(address))
 		fmt.Printf("%s:    %.2f ms\n", cyan("%-10s", "DNS Lookup"), float64(stats.DNS)/1e6)

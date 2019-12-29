@@ -8,9 +8,12 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"golang.org/x/net/http/httpproxy"
 )
 
 type Stats struct {
+	Proxy    bool
 	Scheme   string
 	DNS      int64
 	TCP      int64
@@ -86,6 +89,12 @@ func New(address string) (Stats, error) {
 	stats.Transfer = t7 - t4
 	stats.TLS = t6 - t5
 	stats.Total = t7 - t0
+
+	// Detect proxies
+	pc := httpproxy.FromEnvironment()
+	if pc.HTTPProxy != "" {
+		stats.Proxy = true
+	}
 
 	return stats, err
 }
