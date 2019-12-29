@@ -6,8 +6,6 @@ import (
 	"os"
 )
 
-var CommonPorts []string = []string{"22", "80", "443"}
-
 var Version bool
 var PingDst string
 var TCPingDst string

@@ -28,28 +28,14 @@ func main() {
 			flag.PrintDefaults()
 		case 1:
 			addr := flag.Args()[0]
-			ip := lookupIP(addr)
 
 			// Query
 			address := parseInput(addr)
 			queryInfo(address)
-			fmt.Println()
-
-			// ICMP Ping
-			dst, dur, err := ping.New(ip)
-			logPing(dst, dur, err)
-			fmt.Println()
-
-			// TCP Ping
-			for _, port := range CommonPorts {
-				address := net.JoinHostPort(ip, port)
-				c := tcping.New(address)
-				logTcping(c, address)
-			}
-			fmt.Println()
 
 			// HTTP Ping
 			if strings.HasPrefix(addr, "http://") || strings.HasPrefix(addr, "https://") {
+				fmt.Println()
 				stats, err := httping.New(addr)
 				logHttping(stats, err, addr)
 			}
