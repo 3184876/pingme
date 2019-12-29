@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 )
 
 const (
@@ -24,7 +25,12 @@ func queryInfo(address string) IPInfo {
 
 	res, err := http.Get(API + address)
 	if err != nil {
-		log.Fatal(err)
+		match, _ := regexp.MatchString("connection reset by peer", err.Error())
+		if match {
+			log.Fatal("Oops, your connection was reset by magic power. You may need to set env http_proxy.")
+		} else {
+			log.Fatal(err)
+		}
 	}
 	defer res.Body.Close()
 

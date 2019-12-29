@@ -22,7 +22,6 @@ func init() {
 }
 
 func main() {
-
 	if !hasFlag() {
 		switch len(flag.Args()) {
 		case 0:

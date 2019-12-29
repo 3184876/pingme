@@ -54,7 +54,7 @@ TCP     ERROR     google.com:12345
 
 # Note
 
-Root permission is required when running ICMP ping, since it needs open raw socket.
+Root permission is required when running ICMP ping, since it needs to open raw socket.
 
 You can either use sudo command, or set setuid bit for pingme.
 

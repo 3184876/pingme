@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptrace"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -58,9 +59,17 @@ func New(address string) (Stats, error) {
 		},
 	}
 	req = req.WithContext(httptrace.WithClientTrace(req.Context(), trace))
-	_, err = http.DefaultTransport.RoundTrip(req)
+	c := &http.Client{
+		Timeout: 5 * time.Second,
+	}
+	_, err = c.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		match, _ := regexp.MatchString("Client.Timeout exceeded", err.Error())
+		if match {
+			log.Fatal("Connection timeout")
+		} else {
+			log.Fatal(err)
+		}
 	}
 
 	t7 = time.Now().UnixNano()
