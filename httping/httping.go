@@ -83,6 +83,11 @@ func New(address string) (Stats, error) {
 		stats.Scheme = "https"
 	}
 
+	if t0 == 0 {
+		t0 = t2
+		t1 = t2
+	}
+
 	stats.DNS = t1 - t0
 	stats.TCP = t2 - t1
 	stats.Process = t4 - t3
