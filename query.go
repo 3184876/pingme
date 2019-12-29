@@ -6,24 +6,34 @@ import (
 	"io/ioutil"
 	"net/http"
 	"reflect"
+	"strconv"
 )
 
 const (
-	API string = "http://ip-api.com/json/"
+	API string = "https://api.ip.sb/geoip/"
 )
 
 type IPInfo struct {
-	IP      string `json:"query"`
-	City    string `json:"city"`
-	Country string `json:"country"`
-	ISP     string `json:"isp"`
-	AS      string `json:"as"`
+	IP            string  `json:"ip"`
+	CountryCode   string  `json:"country_code"`
+	Country       string  `json:"country"`
+	RegionCode    string  `json:"region_code"`
+	Region        string  `json:"region"`
+	City          string  `json:"city"`
+	PostalCode    string  `json:"postal_code"`
+	ContinentCode string  `json:"continent_code"`
+	Latitude      float64 `json:"latitude"`
+	Longitude     float64 `json:"longitude"`
+	Organization  string  `json:"organization"`
+	Timezone      string  `json:"timezone"`
 }
 
 func queryInfo(address string) {
 	var info IPInfo
 
-	res, err := http.Get(API + address)
+	ip := lookupIP(address)
+
+	res, err := http.Get(API + ip)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,11 +56,17 @@ func printInfo(info IPInfo) {
 	values := make([]string, v.NumField())
 	for i := 0; i < v.NumField(); i++ {
 		names[i] = v.Type().Field(i).Name
-		values[i] = v.Field(i).Interface().(string)
+		if names[i] == "Latitude" || names[i] == "Longitude" {
+			values[i] = strconv.FormatFloat(v.Field(i).Interface().(float64), 'f', -1, 64)
+		} else {
+			values[i] = v.Field(i).Interface().(string)
+		}
 	}
 	l := getMaxNameLength(names)
 	for i := 0; i < v.NumField(); i++ {
-		fmt.Printf("%-*s:    %s\n", l, names[i], values[i])
+		if values[i] != "" {
+			fmt.Printf("%-*s:    %s\n", l, names[i], values[i])
+		}
 	}
 }
 
