@@ -28,19 +28,13 @@ It can also query IP information from third-party api provider (currently we use
 # Examples
 
 ```
-// If only address is provided, pingme will probe some common scan.
+// Pingme will query ip information and do httping by default.
 $ pingme https://www.google.com
 IP     :    74.125.24.105
 City   :    Ashburn
 Country:    United States
 ISP    :    Google LLC
 AS     :    AS15169 Google LLC
-
-ICMP    OPEN      2404:6800:4003:c03::67    2.0 ms
-
-TCP     ERROR     [2404:6800:4003:c03::67]:22
-TCP     OPEN      [2404:6800:4003:c03::67]:80
-TCP     OPEN      [2404:6800:4003:c03::67]:443
 
 Scheme    :    https
 Host      :    www.google.com

@@ -22,6 +22,7 @@ func init() {
 }
 
 func main() {
+
 	if !hasFlag() {
 		switch len(flag.Args()) {
 		case 0:
@@ -31,7 +32,8 @@ func main() {
 
 			// Query
 			address := parseInput(addr)
-			queryInfo(address)
+			info := queryInfo(address)
+			logQuery(info)
 
 			// HTTP Ping
 			if strings.HasPrefix(addr, "http://") || strings.HasPrefix(addr, "https://") {
@@ -74,7 +76,8 @@ func main() {
 			logMtr(hops, MtrDst)
 		} else if isFlagPassed("q") {
 			address := parseInput(Query)
-			queryInfo(address)
+			info := queryInfo(address)
+			logQuery(info)
 		}
 	}
 }

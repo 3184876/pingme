@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"reflect"
 )
 
 const (
@@ -20,7 +19,7 @@ type IPInfo struct {
 	AS      string `json:"as"`
 }
 
-func queryInfo(address string) {
+func queryInfo(address string) IPInfo {
 	var info IPInfo
 
 	res, err := http.Get(API + address)
@@ -37,29 +36,6 @@ func queryInfo(address string) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	printInfo(info)
-}
-
-func printInfo(info IPInfo) {
-	v := reflect.ValueOf(info)
-	names := make([]string, v.NumField())
-	values := make([]string, v.NumField())
-	for i := 0; i < v.NumField(); i++ {
-		names[i] = v.Type().Field(i).Name
-		values[i] = v.Field(i).Interface().(string)
-	}
-	l := getMaxNameLength(names)
-	for i := 0; i < v.NumField(); i++ {
-		fmt.Printf("%-*s:    %s\n", l, names[i], values[i])
-	}
-}
-
-func getMaxNameLength(names []string) int {
-	var length int
-	for _, val := range names {
-		if len(val) > length {
-			length = len(val)
-		}
-	}
-	return length
+	//printInfo(info)
+	return info
 }
