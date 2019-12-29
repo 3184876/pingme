@@ -9,6 +9,24 @@ It can also query IP information from third-party api provider (currently we use
 - Support ICMP/TCP/HTTP protocols
 - Query basic IP information
 
+# Installation
+
+1. Download latest [release](https://github.com/noobly314/pingme/releases/latest) (recommend)
+
+2. Use go get
+
+```
+go get github.com/noobly314/pingme
+```
+
+3. Build on your own
+
+```
+git clone https://github.com/noobly314/pingme.git
+cd pingme
+go build
+```
+
 # Usage
 
 ```
@@ -36,6 +54,7 @@ Country:    United States
 ISP    :    Google LLC
 AS     :    AS15169 Google LLC
 
+Proxy     :    false
 Scheme    :    https
 Host      :    www.google.com
 DNS Lookup:    0.86 ms
