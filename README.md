@@ -1,8 +1,8 @@
 # Introduction
 
-Pingme is lightweight ping probe command line tool, supporting ICMP, TCP and HTTP protocols.
+Pingme is ping probe command line tool, supporting ICMP, TCP and HTTP protocols.
 
-It can also query IP information from third-party api provider (currently we use [https://ip-api.com](https://ip-api.com)).
+You can also use it to query IP information from third-party api provider (currently we use [https://ip-api.com](https://ip-api.com)).
 
 # Features
 
@@ -16,7 +16,7 @@ It can also query IP information from third-party api provider (currently we use
 2. Use go get
 
 ```
-go get github.com/noobly314/pingme
+go get -u github.com/noobly314/pingme
 ```
 
 3. Build on your own
@@ -46,29 +46,35 @@ go build
 # Examples
 
 ```
-// Pingme will query ip information and do httping by default.
-$ pingme https://www.google.com
-IP     :    74.125.24.105
-City   :    Ashburn
-Country:    United States
-ISP    :    Google LLC
-AS     :    AS15169 Google LLC
-
+$ pingme -h https://www.google.com
 Proxy     :    false
 Scheme    :    https
 Host      :    www.google.com
-DNS Lookup:    0.86 ms
-TCP       :    55.87 ms
-TLS       :    54.13 ms
-Process   :    31.72 ms
-Transfer  :    0.26 ms
-Total     :    88.71 ms
+DNS Lookup:    2.05 ms
+TCP       :    2.41 ms
+TLS       :    68.92 ms
+Process   :    29.28 ms
+Transfer  :    0.19 ms
+Total     :    103.06 ms
 ```
 
 ```
-// You can specify any ports in tcping mode.
-$ pingme -t google.com:12345
-TCP     ERROR     google.com:12345
+$ pingme -i www.google.com
+ICMP   OPEN      74.125.200.147    2.2 ms
+```
+
+```
+$ pingme -t www.google.com:443
+TCP    OPEN      www.google.com:443
+```
+
+```
+$ pingme -q www.google.com
+IP     :    172.217.194.103
+City   :    Queenstown Estate
+Country:    Singapore
+ISP    :    Google LLC
+AS     :    AS15169 Google LLC
 ```
 
 # Note
